@@ -24,12 +24,12 @@ COPY . /var/www
 #     && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
 
 # # Copy the crontab file and entrypoint script into the container
-# COPY crontab /hello-cron
-# COPY entrypoint.sh /entrypoint.sh
+COPY crontab /hello-cron
+COPY entrypoint.sh /entrypoint.sh
 
-# # Install the crontab and make the entrypoint script executable
-# RUN crontab /hello-cron \
-#     && chmod +x /entrypoint.sh
+# Install the crontab and make the entrypoint script executable
+RUN crontab /hello-cron \
+    && chmod +x /entrypoint.sh
 
 # Run the entrypoint script
 ENTRYPOINT ["/entrypoint.sh"]
