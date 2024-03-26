@@ -7,14 +7,14 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install pdo pdo_mysql \
 
-    # Install Composer
+# Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Set the working directory for the Laravel app
 WORKDIR /workspace
 
 # Copy the Laravel app into the container
-COPY app/live-n-learn-app /workspace
+COPY . /workspace
 
 # Set proper permissions for the storage and bootstrap/cache directories
 # RUN chown -R www-data:www-data /workspace/storage /workspace/bootstrap/cache \
