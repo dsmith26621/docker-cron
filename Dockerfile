@@ -1,29 +1,26 @@
-# Use the official PHP image as the base image
-FROM php:8.0-fpm
+FROM ubuntu:22.04
 
 # Install necessary packages for Laravel, including cron and unzip
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install -y cron curl unzip libpq-dev \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install -y cron curl unzip libpq-dev php \
     # Remove package lists for smaller image sizes
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install pdo pdo_mysql \
+
     # Install Composer
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Set the working directory for the Laravel app
-WORKDIR /var/www
+WORKDIR /workspace
 
 # Copy the Laravel app into the container
-COPY . /var/www
+COPY . /workspace
 
-# Install the Laravel app dependencies
-# RUN composer install
+# Set proper permissions for the storage and bootstrap/cache directories
+RUN chown -R www-data:www-data /workspace/storage /workspace/bootstrap/cache \
+    && chmod -R 755 /workspace/storage /workspace/bootstrap/cache
 
-# # Set proper permissions for the storage and bootstrap/cache directories
-# RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
-#     && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
-
-# # Copy the crontab file and entrypoint script into the container
+# Copy the crontab file and entrypoint script into the container
 COPY crontab /hello-cron
 COPY entrypoint.sh /entrypoint.sh
 
