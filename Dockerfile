@@ -14,7 +14,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /workspace
 
 # Copy the Laravel app into the container
-COPY . /workspace
+COPY app/live-n-learn-app /workspace
 
 # Set proper permissions for the storage and bootstrap/cache directories
 # RUN chown -R www-data:www-data /workspace/storage /workspace/bootstrap/cache \
